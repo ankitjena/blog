@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ankit Jena</title>
+    <link>/</link>
+    <description>Recent content on Ankit Jena</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Thu, 08 Aug 2019 13:23:10 +0100</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Interview with Aerogear for Google Summer of Code</title>
+      <link>/posts/2019/08/interview-with-aerogear-for-google-summer-of-code/</link>
+      <pubDate>Thu, 08 Aug 2019 13:23:10 +0100</pubDate>
+      
+      <guid>/posts/2019/08/interview-with-aerogear-for-google-summer-of-code/</guid>
+      <description>It&#39;s been more than 2 months working on Graphback, a tool to help developers build GraphQL servers easily. It&#39;s been an awesome experience the entire time starting from the community bonding period to now. And I am sure the last month will be great as well.
+Recently, I had an interview with my organization sharing my experience. Here goes the transcript.
+Can you tell us a little bit about yourself?</description>
+    </item>
+    
+    <item>
+      <title>Using GraphQL Visitor Pattern</title>
+      <link>/posts/2019/07/using-graphql-visitor-pattern/</link>
+      <pubDate>Fri, 12 Jul 2019 13:23:10 +0100</pubDate>
+      
+      <guid>/posts/2019/07/using-graphql-visitor-pattern/</guid>
+      <description>GraphQL is a amazing technology which is being adapted more and more. As part of my work for JBoss community in GSoC&#39;19 I have been working on Graphback. For the needs of the project we had to extract information from a schema (SDL syntax) into a nice object we can use. For example, convert this
+type User{ username: String! email: String } to something like
+{ name: &amp;quot;User&amp;quot;, fields: [ { name: &amp;quot;username&amp;quot;, type: &amp;quot;String&amp;quot;, isNull: false }, { name: &amp;quot;email&amp;quot;, type: &amp;quot;String&amp;quot;, isNull: true } ] } When schema is read by GraphQL it doesn&#39;t store it as a string, it does a lot of parsing to convert it into an AST(will talk more about it).</description>
+    </item>
+    
+    <item>
+      <title>All the new awesome ES6 features</title>
+      <link>/posts/2018/11/all-the-new-awesome-es6-features/</link>
+      <pubDate>Fri, 02 Nov 2018 13:23:10 +0100</pubDate>
+      
+      <guid>/posts/2018/11/all-the-new-awesome-es6-features/</guid>
+      <description>JavaScript is the language of the web. Alongside HTML and CSS it is one of the three core technologies of the World Wide Web. It enables interactive web pages and thus is an essential part of almost every web application. Initially only implemented at the client-side in web browsers, JavaScript engines are embedded in many other types of host software, including server-side in web servers and databases, and in non-web programs such as word processors and PDF software, and in runtime environments that make JavaScript available for writing mobile and desktop applications, including desktop widgets.</description>
+    </item>
+    
+  </channel>
+</rss>

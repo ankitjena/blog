@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Ankit Jena ">
+<meta name="description" content="GraphQL is a amazing technology which is being adapted more and more. As part of my work for JBoss community in GSoC&#39;19 I have been working on Graphback. For the needs of the project we had to extract information from a schema (SDL syntax) into a nice object we can use. For example, convert this
+type User{ username: String! email: String } to something like
+{ name: &amp;quot;User&amp;quot;, fields: [ { name: &amp;quot;username&amp;quot;, type: &amp;quot;String&amp;quot;, isNull: false }, { name: &amp;quot;email&amp;quot;, type: &amp;quot;String&amp;quot;, isNull: true } ] } When schema is read by GraphQL it doesn&#39;t store it as a string, it does a lot of parsing to convert it into an AST(will talk more about it)." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="#252627" />
+<link rel="canonical" href="/posts/2019/07/using-graphql-visitor-pattern/" />
+
+
+    <title>
+        
+            Using GraphQL Visitor Pattern :: Ankit Jena  — Hello Friend NG Theme
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.min.7bfbbe12786fa0ded4b4c0d792cbb36a5bd0bdb0b856dde57aa7b1f6fe0f2b87.css">
+
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#252627">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#252627">
+    <meta name="theme-color" content="#252627">
+
+<meta itemprop="name" content="Using GraphQL Visitor Pattern">
+<meta itemprop="description" content="GraphQL is a amazing technology which is being adapted more and more. As part of my work for JBoss community in GSoC&#39;19 I have been working on Graphback. For the needs of the project we had to extract information from a schema (SDL syntax) into a nice object we can use. For example, convert this
+type User{ username: String! email: String } to something like
+{ name: &quot;User&quot;, fields: [ { name: &quot;username&quot;, type: &quot;String&quot;, isNull: false }, { name: &quot;email&quot;, type: &quot;String&quot;, isNull: true } ] } When schema is read by GraphQL it doesn&#39;t store it as a string, it does a lot of parsing to convert it into an AST(will talk more about it).">
+<meta itemprop="datePublished" content="2019-07-12T13:23:10&#43;01:00" />
+<meta itemprop="dateModified" content="2019-07-12T13:23:10&#43;01:00" />
+<meta itemprop="wordCount" content="800">
+<meta itemprop="image" content="/"/>
+
+
+
+<meta itemprop="keywords" content="graphql,visitor-pattern," /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/"/>
+
+<meta name="twitter:title" content="Using GraphQL Visitor Pattern"/>
+<meta name="twitter:description" content="GraphQL is a amazing technology which is being adapted more and more. As part of my work for JBoss community in GSoC&#39;19 I have been working on Graphback. For the needs of the project we had to extract information from a schema (SDL syntax) into a nice object we can use. For example, convert this
+type User{ username: String! email: String } to something like
+{ name: &quot;User&quot;, fields: [ { name: &quot;username&quot;, type: &quot;String&quot;, isNull: false }, { name: &quot;email&quot;, type: &quot;String&quot;, isNull: true } ] } When schema is read by GraphQL it doesn&#39;t store it as a string, it does a lot of parsing to convert it into an AST(will talk more about it)."/>
+
+
+
+
+
+    <meta property="article:published_time" content="2019-07-12 13:23:10 &#43;0100 &#43;0100" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">$ cd /home/</span>
+            <span class="logo__cursor" style=""></span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/posts/">Blog</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>4 minutes
+
+            
+
+            </p>
+        </div>
+
+        <article>
+            <h1 class="post-title">
+                <a href="/posts/2019/07/using-graphql-visitor-pattern/">Using GraphQL Visitor Pattern</a>
+            </h1>
+
+            
+
+            <div class="post-content">
+                <p><img src="https://thepracticaldev.s3.amazonaws.com/i/s3kikko8r5xkheauom4f.png" alt="">
+GraphQL is a amazing technology which is being adapted more and more. As part of my work for JBoss community in GSoC'19 I have been working on <a href="https://aerogear.github.io/graphback">Graphback</a>. For the needs of the project we had to extract information from a schema (SDL syntax) into a nice object we can use. For example, convert this</p>
+<pre><code>type User{
+  username: String!
+  email: String
+}
+</code></pre><p>to something like</p>
+<pre><code>{
+  name: &quot;User&quot;,
+  fields: [
+    {
+      name: &quot;username&quot;,
+      type: &quot;String&quot;,
+      isNull: false
+    },
+    {
+      name: &quot;email&quot;,
+      type: &quot;String&quot;,
+      isNull: true
+    }
+  ]
+}
+</code></pre><p>When schema is read by GraphQL it doesn't store it as a string, it does a lot of parsing to convert it into an AST(will talk more about it).</p>
+<p>The best way to do this is using Visitor pattern. In this blog post I'm going to explain how GraphQL converts schema to ASTs and using Visitor Pattern.</p>
+<h2 id="abstract-syntax-treeast"><strong>Abstract Syntax Tree(AST)</strong></h2>
+<blockquote>
+<p><em>When a GraphQL server receives a query to process it generally comes in as a String. This string must be tokenized and parsed into a representation that the machine understands. This representation is called an abstract syntax tree.</em></p>
+</blockquote>
+<p>A great tool to inspect abstract syntax trees is <a href="https://astexplorer.net">AST Explorer</a>. The site lets you quickly paste code from JavaScript to PHP to TypeScript and even GraphQL types into the UI and then provides the resulting abstract syntax tree. For the above example, the AST is</p>
+<pre><code>{
+  &quot;kind&quot;: &quot;Document&quot;,
+  &quot;definitions&quot;: [
+    {
+      &quot;kind&quot;: &quot;ObjectTypeDefinition&quot;,
+      &quot;name&quot;: {
+        &quot;kind&quot;: &quot;Name&quot;,
+        &quot;value&quot;: &quot;User&quot;,
+        &quot;loc&quot;: {
+          &quot;start&quot;: 133,
+          &quot;end&quot;: 137
+        }
+      },
+      &quot;interfaces&quot;: [],
+      &quot;directives&quot;: [],
+      &quot;fields&quot;: [
+        {
+          &quot;kind&quot;: &quot;FieldDefinition&quot;,
+          &quot;name&quot;: {
+            &quot;kind&quot;: &quot;Name&quot;,
+            &quot;value&quot;: &quot;username&quot;,
+            &quot;loc&quot;: {
+              &quot;start&quot;: 141,
+              &quot;end&quot;: 149
+            }
+          },
+          &quot;arguments&quot;: [],
+          &quot;type&quot;: {
+            &quot;kind&quot;: &quot;NonNullType&quot;,
+            &quot;type&quot;: {
+              &quot;kind&quot;: &quot;NamedType&quot;,
+              &quot;name&quot;: {
+                &quot;kind&quot;: &quot;Name&quot;,
+                &quot;value&quot;: &quot;String&quot;,
+                &quot;loc&quot;: {
+                  &quot;start&quot;: 151,
+                  &quot;end&quot;: 157
+                }
+              },
+              &quot;loc&quot;: {
+                &quot;start&quot;: 151,
+                &quot;end&quot;: 157
+              }
+            },
+            &quot;loc&quot;: {
+              &quot;start&quot;: 151,
+              &quot;end&quot;: 158
+            }
+          },
+          &quot;directives&quot;: [],
+          &quot;loc&quot;: {
+            &quot;start&quot;: 141,
+            &quot;end&quot;: 158
+          }
+        },
+        {
+          &quot;kind&quot;: &quot;FieldDefinition&quot;,
+          &quot;name&quot;: {
+            &quot;kind&quot;: &quot;Name&quot;,
+            &quot;value&quot;: &quot;email&quot;,
+            &quot;loc&quot;: {
+              &quot;start&quot;: 162,
+              &quot;end&quot;: 167
+            }
+          },
+          &quot;arguments&quot;: [],
+          &quot;type&quot;: {
+            &quot;kind&quot;: &quot;NamedType&quot;,
+            &quot;name&quot;: {
+              &quot;kind&quot;: &quot;Name&quot;,
+              &quot;value&quot;: &quot;String&quot;,
+              &quot;loc&quot;: {
+                &quot;start&quot;: 169,
+                &quot;end&quot;: 175
+              }
+            },
+            &quot;loc&quot;: {
+              &quot;start&quot;: 169,
+              &quot;end&quot;: 175
+            }
+          },
+          &quot;directives&quot;: [],
+          &quot;loc&quot;: {
+            &quot;start&quot;: 162,
+            &quot;end&quot;: 175
+          }
+        }
+      ],
+      &quot;loc&quot;: {
+        &quot;start&quot;: 128,
+        &quot;end&quot;: 177
+      }
+    }
+  ],
+  &quot;loc&quot;: {
+    &quot;start&quot;: 0,
+    &quot;end&quot;: 178
+  }
+}
+</code></pre><p>The AST includes a lot of metadata, such as location in the source, or identifiers, such as argument names; and thanks to this deeply-nested JSON object, we now have all the power we need to work with GraphQL schemas.</p>
+<h2 id="visitor-pattern"><strong>Visitor Pattern</strong></h2>
+<blockquote>
+<p><em>visit() will walk through an AST using a depth first traversal, calling the visitor's enter function at each node in the traversal, and calling the leave function after visiting that node and all of its child nodes.</em></p>
+</blockquote>
+<blockquote>
+<p><em>By returning different values from the enter and leave functions, the behavior of the visitor can be altered, including skipping over a sub-tree of the AST (by returning false), editing the AST by returning a value or null to remove the value, or to stop the whole traversal by returning BREAK.</em></p>
+</blockquote>
+<blockquote>
+<p><em>– GraphQL Documentation</em></p>
+</blockquote>
+<p>Visit function does a depth first traversal and it calls the <code>enter</code> function each time it encounters and node and <code>leave</code> function after a node's traversal. When we return a value from a node in the leave function the node is changed to a return value.</p>
+<p>Plus we can visit specific nodes we want using Named visitors.</p>
+<pre><code>visit(ast, {
+  leave: {
+    Kind(node) {
+      // leave the &quot;Kind&quot; node
+    }
+  }
+})
+</code></pre><p>That's all we need for parsing the AST. Let's write the code.</p>
+<p>For this case, we get to see a few kind of nodes, <code>ObjectTypeDefinition</code>, <code>FieldDefinition</code>, <code>NotNullType</code>, <code>NamedType</code> and <code>Name</code>. Let's go through them in order from smaller nodes to larger ones to write our visitor.</p>
+<pre><code>const visitor = {
+  Name: (node) =&gt; {
+    return node.value
+  },
+  NamedType: (node) =&gt; {
+    return {
+      &quot;type&quot;: node.name,  //returns the value
+      &quot;isNull&quot;: true
+    }
+  },
+  NonNullType: (node) =&gt; {
+    return {
+      //spread returned object from NamedType
+      ...node.type,     
+      &quot;isNull&quot;: false
+    }
+  },
+  FieldDefinition: (node) =&gt; {
+    return {
+      //spread returned object from NamedType or NotNullType
+      ...node.type,     
+      &quot;name&quot;: node.name
+    }
+  },
+  ObjectTypeDefinition: (node) =&gt; {
+    return {
+      &quot;name&quot;: node.name,
+      &quot;fields&quot;: node.fields
+    }
+  }
+}
+</code></pre><p>When we user this in the leave function of visitor. We get our required output in the definitions field of the result.</p>
+<p>Now to actually do the visit and get the result.</p>
+<pre><code>const ast = parse(schemaText)
+const result = visit(ast, { leave: visitor })
+</code></pre><p>Visitor pattern is really helpful as you can adept it to your use cases. This is one of the few great tools within GraphQL. Hope this helps.</p>
+<h3 id="references">References</h3>
+<p>1 - <a href="https://graphql.org/graphql-js/language/#visitor">https://graphql.org/graphql-js/language/#visitor</a></p>
+<p>2 - <a href="https://graphql-code-generator.com/docs/custom-codegen/using-visitor">https://graphql-code-generator.com/docs/custom-codegen/using-visitor</a></p>
+
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="/tags/graphql">graphql</a></span><span class="tag"><a href="/tags/visitor-pattern">visitor-pattern</a></span>
+                </p>
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>800 Words</p>
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-07-12 17:53 &#43;0530</p>
+        </div>
+
+        
+            <div class="pagination">
+                <div class="pagination__title">
+                    <span class="pagination__title-h"></span>
+                    <hr />
+                </div>
+
+                <div class="pagination__buttons">
+                    
+                        <span class="button previous">
+                            <a href="/posts/2019/08/interview-with-aerogear-for-google-summer-of-code/">
+                                <span class="button__icon">←</span>
+                                <span class="button__text">Interview with Aerogear for Google Summer of Code</span>
+                            </a>
+                        </span>
+                    
+
+                    
+                        <span class="button next">
+                            <a href="/posts/2018/11/all-the-new-awesome-es6-features/">
+                                <span class="button__text">All the new awesome ES6 features</span>
+                                <span class="button__icon">→</span>
+                            </a>
+                        </span>
+                    
+                </div>
+            </div>
+        
+
+        
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2019</span>
+            
+                <span><a href="/">Ankit Jena</a></span>
+            
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span> <a href="/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">rhazdon</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.2d5469329143160ae2456a69c3c76dc2d0a3b212b46afe291a51bd68650ed6f8697e001dab54f1c272c77ce08092a8c55e5bb4314e0ee334aab4b927ec896638.js" integrity="sha512-LVRpMpFDFgriRWppw8dtwtCjshK0av4pGlG9aGUO1vhpfgAdq1TxwnLHfOCAkqjFXlu0MU4O4zSqtLkn7IlmOA=="></script>
+
+
+
+    </body>
+</html>

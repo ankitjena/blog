@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GSoC on Ankit Jena</title>
+    <link>/tags/gsoc/</link>
+    <description>Recent content in GSoC on Ankit Jena</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Thu, 08 Aug 2019 13:23:10 +0100</lastBuildDate>
+    
+	<atom:link href="/tags/gsoc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Interview with Aerogear for Google Summer of Code</title>
+      <link>/posts/2019/08/interview-with-aerogear-for-google-summer-of-code/</link>
+      <pubDate>Thu, 08 Aug 2019 13:23:10 +0100</pubDate>
+      
+      <guid>/posts/2019/08/interview-with-aerogear-for-google-summer-of-code/</guid>
+      <description>It&#39;s been more than 2 months working on Graphback, a tool to help developers build GraphQL servers easily. It&#39;s been an awesome experience the entire time starting from the community bonding period to now. And I am sure the last month will be great as well.
+Recently, I had an interview with my organization sharing my experience. Here goes the transcript.
+Can you tell us a little bit about yourself?</description>
+    </item>
+    
+  </channel>
+</rss>

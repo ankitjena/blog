@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Ankit Jena</title>
+    <link>/tags/</link>
+    <description>Recent content in Tags on Ankit Jena</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Thu, 08 Aug 2019 13:23:10 +0100</lastBuildDate>
+    
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GSoC</title>
+      <link>/tags/gsoc/</link>
+      <pubDate>Thu, 08 Aug 2019 13:23:10 +0100</pubDate>
+      
+      <guid>/tags/gsoc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>open-source</title>
+      <link>/tags/open-source/</link>
+      <pubDate>Thu, 08 Aug 2019 13:23:10 +0100</pubDate>
+      
+      <guid>/tags/open-source/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>graphql</title>
+      <link>/tags/graphql/</link>
+      <pubDate>Fri, 12 Jul 2019 13:23:10 +0100</pubDate>
+      
+      <guid>/tags/graphql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>visitor-pattern</title>
+      <link>/tags/visitor-pattern/</link>
+      <pubDate>Fri, 12 Jul 2019 13:23:10 +0100</pubDate>
+      
+      <guid>/tags/visitor-pattern/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>es6</title>
+      <link>/tags/es6/</link>
+      <pubDate>Fri, 02 Nov 2018 13:23:10 +0100</pubDate>
+      
+      <guid>/tags/es6/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Javascript</title>
+      <link>/tags/javascript/</link>
+      <pubDate>Fri, 02 Nov 2018 13:23:10 +0100</pubDate>
+      
+      <guid>/tags/javascript/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

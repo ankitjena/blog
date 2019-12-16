@@ -1,0 +1,429 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on Ankit Jena</title>
+        <link>/posts/</link>
+        <description>Recent content in Posts on Ankit Jena</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+        <lastBuildDate>Thu, 08 Aug 2019 13:23:10 +0100</lastBuildDate>
+        <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Interview with Aerogear for Google Summer of Code</title>
+            <link>/posts/2019/08/interview-with-aerogear-for-google-summer-of-code/</link>
+            <pubDate>Thu, 08 Aug 2019 13:23:10 +0100</pubDate>
+            
+            <guid>/posts/2019/08/interview-with-aerogear-for-google-summer-of-code/</guid>
+            <description>It&#39;s been more than 2 months working on Graphback, a tool to help developers build GraphQL servers easily. It&#39;s been an awesome experience the entire time starting from the community bonding period to now. And I am sure the last month will be great as well.
+Recently, I had an interview with my organization sharing my experience. Here goes the transcript.
+Can you tell us a little bit about yourself?</description>
+            <content type="html"><![CDATA[<p>It's been more than 2 months working on <a href="https://graphback.dev">Graphback</a>, a tool to help developers build GraphQL servers easily. It's been an awesome experience the entire time starting from the community bonding period to now. And I am sure the last month will be great as well.</p>
+<p><img src="https://thepracticaldev.s3.amazonaws.com/i/na9sim46ldmr40ukcree.png" alt=""></p>
+<p>Recently, I had an interview with my organization sharing my experience. Here goes the transcript.</p>
+<p><strong>Can you tell us a little bit about yourself?</strong></p>
+<p>I am Ankit Jena, currently pursuing my undergrad in Computer Science, from CET Bhubaneswar. I have been working part-time and freelancing as a full stack developer for a year now.</p>
+<p><strong>What do you like to do in free time?</strong></p>
+<p>I like to watch movies or play games in my free time if I am not usually hanging out with my friends. Else I also love reading about innovations in technology.</p>
+<p><strong>Can you tell us about your GSOC project?</strong></p>
+<p>Graphback is a project that targets to help developers to build backend applications by using data models defined in GraphQL specification. It allows a developer to bootstrap a GraphQL server with a single command, selecting from many of the available templates and extensions. It generates a completely customizable server and allows the user to manage the database of their choice based on the user’s data model. It allows users to focus more on delivering business value.</p>
+<p><strong>What was the reason for choosing this topic?</strong></p>
+<p>When I was learning GraphQL from various tutorials, setting up the project had a very high entry barrier. When this idea came up, I instantly liked it in my mind because I had faced the same problem and thought this could help people.</p>
+<p><strong>How is your project aiding AeroGear community?</strong></p>
+<p>The project will allow developers at aerogear to quickly bootstrap a GraphQL server according to their use cases and focus more on providing implementation specific to their business including server, web and mobile clients.</p>
+<p><strong>What was the most challenging element of your project?</strong></p>
+<p>The most challenging element of the project was initially deciding the correct approach for building the core of the project. I did extensive research over the weeks and decided on the approach that happened to be successful afterward.</p>
+<p><strong>Any funny, exciting or surprising moments of your GSOC?</strong></p>
+<p>Something which really excited me was when we released Graphback’s first working version and we got reviews flowing in from developers requesting features. That was really exciting for me as this was my first open-source project and the reviews were positive.</p>
+<p>A surprising moment would be, I had made a PR, and my mentor asked me for changes. I made all of them and when I woke up in the morning, my mentor had said that it was one of the best PR he had ever seen. That was really surprising and I was happy that I had improved over time.</p>
+<p><strong>Did you have any problems or obstacles when doing this project?</strong></p>
+<p>In the community bonding period, my state was hit by a severe cyclonic storm (“<em>Fani</em>”) which caused a lot of damage. So there were a lot of power surges during the restoration works which halted the initial progress. Also, my exams were rescheduled because of this into the coding period of GSoC.</p>
+<p>During the second month, my laptop’s motherboard short-circuited and had to borrow my friend’s laptop and work in it for almost 20 days.</p>
+<p><strong>Do you plan to be involved in Red Hat/AeroGear projects after GSOC?</strong></p>
+<p>Yes, I would love to keep contributing to Graphback and other Red Hat/Aerogear projects if I get a chance to.</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Using GraphQL Visitor Pattern</title>
+            <link>/posts/2019/07/using-graphql-visitor-pattern/</link>
+            <pubDate>Fri, 12 Jul 2019 13:23:10 +0100</pubDate>
+            
+            <guid>/posts/2019/07/using-graphql-visitor-pattern/</guid>
+            <description>GraphQL is a amazing technology which is being adapted more and more. As part of my work for JBoss community in GSoC&#39;19 I have been working on Graphback. For the needs of the project we had to extract information from a schema (SDL syntax) into a nice object we can use. For example, convert this
+type User{ username: String! email: String } to something like
+{ name: &amp;quot;User&amp;quot;, fields: [ { name: &amp;quot;username&amp;quot;, type: &amp;quot;String&amp;quot;, isNull: false }, { name: &amp;quot;email&amp;quot;, type: &amp;quot;String&amp;quot;, isNull: true } ] } When schema is read by GraphQL it doesn&#39;t store it as a string, it does a lot of parsing to convert it into an AST(will talk more about it).</description>
+            <content type="html"><![CDATA[<p><img src="https://thepracticaldev.s3.amazonaws.com/i/s3kikko8r5xkheauom4f.png" alt="">
+GraphQL is a amazing technology which is being adapted more and more. As part of my work for JBoss community in GSoC'19 I have been working on <a href="https://aerogear.github.io/graphback">Graphback</a>. For the needs of the project we had to extract information from a schema (SDL syntax) into a nice object we can use. For example, convert this</p>
+<pre><code>type User{
+  username: String!
+  email: String
+}
+</code></pre><p>to something like</p>
+<pre><code>{
+  name: &quot;User&quot;,
+  fields: [
+    {
+      name: &quot;username&quot;,
+      type: &quot;String&quot;,
+      isNull: false
+    },
+    {
+      name: &quot;email&quot;,
+      type: &quot;String&quot;,
+      isNull: true
+    }
+  ]
+}
+</code></pre><p>When schema is read by GraphQL it doesn't store it as a string, it does a lot of parsing to convert it into an AST(will talk more about it).</p>
+<p>The best way to do this is using Visitor pattern. In this blog post I'm going to explain how GraphQL converts schema to ASTs and using Visitor Pattern.</p>
+<h2 id="abstract-syntax-treeast"><strong>Abstract Syntax Tree(AST)</strong></h2>
+<blockquote>
+<p><em>When a GraphQL server receives a query to process it generally comes in as a String. This string must be tokenized and parsed into a representation that the machine understands. This representation is called an abstract syntax tree.</em></p>
+</blockquote>
+<p>A great tool to inspect abstract syntax trees is <a href="https://astexplorer.net">AST Explorer</a>. The site lets you quickly paste code from JavaScript to PHP to TypeScript and even GraphQL types into the UI and then provides the resulting abstract syntax tree. For the above example, the AST is</p>
+<pre><code>{
+  &quot;kind&quot;: &quot;Document&quot;,
+  &quot;definitions&quot;: [
+    {
+      &quot;kind&quot;: &quot;ObjectTypeDefinition&quot;,
+      &quot;name&quot;: {
+        &quot;kind&quot;: &quot;Name&quot;,
+        &quot;value&quot;: &quot;User&quot;,
+        &quot;loc&quot;: {
+          &quot;start&quot;: 133,
+          &quot;end&quot;: 137
+        }
+      },
+      &quot;interfaces&quot;: [],
+      &quot;directives&quot;: [],
+      &quot;fields&quot;: [
+        {
+          &quot;kind&quot;: &quot;FieldDefinition&quot;,
+          &quot;name&quot;: {
+            &quot;kind&quot;: &quot;Name&quot;,
+            &quot;value&quot;: &quot;username&quot;,
+            &quot;loc&quot;: {
+              &quot;start&quot;: 141,
+              &quot;end&quot;: 149
+            }
+          },
+          &quot;arguments&quot;: [],
+          &quot;type&quot;: {
+            &quot;kind&quot;: &quot;NonNullType&quot;,
+            &quot;type&quot;: {
+              &quot;kind&quot;: &quot;NamedType&quot;,
+              &quot;name&quot;: {
+                &quot;kind&quot;: &quot;Name&quot;,
+                &quot;value&quot;: &quot;String&quot;,
+                &quot;loc&quot;: {
+                  &quot;start&quot;: 151,
+                  &quot;end&quot;: 157
+                }
+              },
+              &quot;loc&quot;: {
+                &quot;start&quot;: 151,
+                &quot;end&quot;: 157
+              }
+            },
+            &quot;loc&quot;: {
+              &quot;start&quot;: 151,
+              &quot;end&quot;: 158
+            }
+          },
+          &quot;directives&quot;: [],
+          &quot;loc&quot;: {
+            &quot;start&quot;: 141,
+            &quot;end&quot;: 158
+          }
+        },
+        {
+          &quot;kind&quot;: &quot;FieldDefinition&quot;,
+          &quot;name&quot;: {
+            &quot;kind&quot;: &quot;Name&quot;,
+            &quot;value&quot;: &quot;email&quot;,
+            &quot;loc&quot;: {
+              &quot;start&quot;: 162,
+              &quot;end&quot;: 167
+            }
+          },
+          &quot;arguments&quot;: [],
+          &quot;type&quot;: {
+            &quot;kind&quot;: &quot;NamedType&quot;,
+            &quot;name&quot;: {
+              &quot;kind&quot;: &quot;Name&quot;,
+              &quot;value&quot;: &quot;String&quot;,
+              &quot;loc&quot;: {
+                &quot;start&quot;: 169,
+                &quot;end&quot;: 175
+              }
+            },
+            &quot;loc&quot;: {
+              &quot;start&quot;: 169,
+              &quot;end&quot;: 175
+            }
+          },
+          &quot;directives&quot;: [],
+          &quot;loc&quot;: {
+            &quot;start&quot;: 162,
+            &quot;end&quot;: 175
+          }
+        }
+      ],
+      &quot;loc&quot;: {
+        &quot;start&quot;: 128,
+        &quot;end&quot;: 177
+      }
+    }
+  ],
+  &quot;loc&quot;: {
+    &quot;start&quot;: 0,
+    &quot;end&quot;: 178
+  }
+}
+</code></pre><p>The AST includes a lot of metadata, such as location in the source, or identifiers, such as argument names; and thanks to this deeply-nested JSON object, we now have all the power we need to work with GraphQL schemas.</p>
+<h2 id="visitor-pattern"><strong>Visitor Pattern</strong></h2>
+<blockquote>
+<p><em>visit() will walk through an AST using a depth first traversal, calling the visitor's enter function at each node in the traversal, and calling the leave function after visiting that node and all of its child nodes.</em></p>
+</blockquote>
+<blockquote>
+<p><em>By returning different values from the enter and leave functions, the behavior of the visitor can be altered, including skipping over a sub-tree of the AST (by returning false), editing the AST by returning a value or null to remove the value, or to stop the whole traversal by returning BREAK.</em></p>
+</blockquote>
+<blockquote>
+<p><em>– GraphQL Documentation</em></p>
+</blockquote>
+<p>Visit function does a depth first traversal and it calls the <code>enter</code> function each time it encounters and node and <code>leave</code> function after a node's traversal. When we return a value from a node in the leave function the node is changed to a return value.</p>
+<p>Plus we can visit specific nodes we want using Named visitors.</p>
+<pre><code>visit(ast, {
+  leave: {
+    Kind(node) {
+      // leave the &quot;Kind&quot; node
+    }
+  }
+})
+</code></pre><p>That's all we need for parsing the AST. Let's write the code.</p>
+<p>For this case, we get to see a few kind of nodes, <code>ObjectTypeDefinition</code>, <code>FieldDefinition</code>, <code>NotNullType</code>, <code>NamedType</code> and <code>Name</code>. Let's go through them in order from smaller nodes to larger ones to write our visitor.</p>
+<pre><code>const visitor = {
+  Name: (node) =&gt; {
+    return node.value
+  },
+  NamedType: (node) =&gt; {
+    return {
+      &quot;type&quot;: node.name,  //returns the value
+      &quot;isNull&quot;: true
+    }
+  },
+  NonNullType: (node) =&gt; {
+    return {
+      //spread returned object from NamedType
+      ...node.type,     
+      &quot;isNull&quot;: false
+    }
+  },
+  FieldDefinition: (node) =&gt; {
+    return {
+      //spread returned object from NamedType or NotNullType
+      ...node.type,     
+      &quot;name&quot;: node.name
+    }
+  },
+  ObjectTypeDefinition: (node) =&gt; {
+    return {
+      &quot;name&quot;: node.name,
+      &quot;fields&quot;: node.fields
+    }
+  }
+}
+</code></pre><p>When we user this in the leave function of visitor. We get our required output in the definitions field of the result.</p>
+<p>Now to actually do the visit and get the result.</p>
+<pre><code>const ast = parse(schemaText)
+const result = visit(ast, { leave: visitor })
+</code></pre><p>Visitor pattern is really helpful as you can adept it to your use cases. This is one of the few great tools within GraphQL. Hope this helps.</p>
+<h3 id="references">References</h3>
+<p>1 - <a href="https://graphql.org/graphql-js/language/#visitor">https://graphql.org/graphql-js/language/#visitor</a></p>
+<p>2 - <a href="https://graphql-code-generator.com/docs/custom-codegen/using-visitor">https://graphql-code-generator.com/docs/custom-codegen/using-visitor</a></p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>All the new awesome ES6 features</title>
+            <link>/posts/2018/11/all-the-new-awesome-es6-features/</link>
+            <pubDate>Fri, 02 Nov 2018 13:23:10 +0100</pubDate>
+            
+            <guid>/posts/2018/11/all-the-new-awesome-es6-features/</guid>
+            <description>JavaScript is the language of the web. Alongside HTML and CSS it is one of the three core technologies of the World Wide Web. It enables interactive web pages and thus is an essential part of almost every web application. Initially only implemented at the client-side in web browsers, JavaScript engines are embedded in many other types of host software, including server-side in web servers and databases, and in non-web programs such as word processors and PDF software, and in runtime environments that make JavaScript available for writing mobile and desktop applications, including desktop widgets.</description>
+            <content type="html"><![CDATA[<p><img src="https://miro.medium.com/max/2048/1*0LH8jqFO1kZ0OVMhkKVF9g.jpeg" alt=""></p>
+<p>JavaScript is the language of the web. Alongside HTML and CSS it is one of the three core technologies of the World Wide Web. It enables interactive web pages and thus is an essential part of almost every web application. Initially only implemented at the client-side in web browsers, JavaScript engines are embedded in many other types of host software, including server-side in web servers and databases, and in non-web programs such as word processors and PDF software, and in runtime environments that make JavaScript available for writing mobile and desktop applications, including desktop widgets.</p>
+<p>So, what is ES6 (also known as ES2015). If you search about it on the web, I think the answers might not be able to feed your curious bug. So, <a href="https://medium.freecodecamp.org/whats-the-difference-between-javascript-and-ecmascript-cba48c73a2b5">here’s a nice article by Micheal Aranda</a> that should answer your questions. Well, it did it for me.</p>
+<p>ES6 was, so to say, the biggest update in which a lot of new features were added to JavaScript. Without wasting any time, let’s get into some of the major ones.</p>
+<p><strong>let instead of var</strong></p>
+<p>ES6 introduced the let keyword to us. let allows you to declare variables that are limited in scope to the block, statement, or expression on which it is used. This is unlike the var keyword, which defines a variable globally, or locally to an entire function regardless of block scope. An explanation of why the name let was chosen can be found <a href="https://stackoverflow.com/questions/37916940/why-was-the-name-let-chosen-for-block-scoped-variable-declarations-in-javascri">here</a>. Here’s an example.</p>
+<pre><code>function varTest() {
+  var x = 1;
+  if (true) {
+    var x = 2;  // same variable!
+    console.log(x);  // 2
+  }
+  console.log(x);  // 2
+}
+
+function letTest() {
+  let x = 1;
+  if (true) {
+    let x = 2;  // different variable
+    console.log(x);  // 2
+  }
+  console.log(x);  // 1
+}
+</code></pre><p><strong>Constants with the const keyword</strong>
+Constants are block-scoped, much like variables defined using the let statement. The value of a constant cannot change through reassignment, and it can't be redeclared.</p>
+<pre><code>const number = 42;try {
+  number = 99;
+} catch(err) {
+  console.log(err);
+  //expected output: TypeError: invalid assignment to const 'number'
+  //Note - error messages will vary depending on browser
+}console.log(number);
+// expected output: 42
+</code></pre><p><strong>Arrow functions</strong>
+An <strong>arrow function expression</strong> has a shorter syntax than a function expression and does not have its own <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">this</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments">arguments</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super">super</a>, or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new.target">new.target</a>. These function expressions are best suited for non-method functions, and they cannot be used as constructors.</p>
+<p>Two factors influenced the introduction of arrow functions: shorter functions</p>
+<pre><code>var elements = [
+  'Hydrogen',
+  'Helium',
+  'Lithium',
+  'Beryllium'
+];
+
+//previous lengthy declaration
+elements.map(function(element ) { 
+  return element.length; 
+}); // [8, 6, 7, 9]
+//enter awesome arrow syntax
+elements.map(element =&gt; {
+  return element.length;
+}); // [8, 6, 7, 9]
+
+elements.map(element =&gt; element.length); // [8, 6, 7, 9]
+
+elements.map(({ length }) =&gt; length); // [8, 6, 7, 9]
+</code></pre><p>and no existence of <em>this</em> keyword.</p>
+<pre><code>function Person(){
+  this.age = 0;
+
+  setInterval(() =&gt; {
+    this.age++; // |this| properly refers to the Person object
+  }, 1000);
+}
+
+var p = new Person();
+</code></pre><p><strong>Template Literals</strong></p>
+<p>Template literals are string literals allowing embedded expressions. You can use multi-line strings and string interpolation features with them.</p>
+<p>Template literals are enclosed by the back-tick (<code> </code>)character instead of double or single quotes. Template literals can contain placeholders. These are indicated by the dollar sign and curly braces (${expression}). The expressions in the placeholders and the text between them get passed to a function. The default function just concatenates the parts into a single string.</p>
+<pre><code>var a = 5;
+console.log('this' + a + 'is a number') //this 5 is a number
+console.log(`this ${a} is a number`) //this 5 is a number
+//for multiline strings
+console.log('this is \na new line')
+//using template literals
+console.log(`this is a new line`)
+</code></pre><p><strong>Rest parameter</strong></p>
+<p>A function’s last parameter can be prefixed with &hellip; which will cause all remaining (user supplied) arguments to be placed within a &ldquo;standard&rdquo; JavaScript array. Only the last parameter can be a &ldquo;rest parameter&rdquo;.</p>
+<pre><code>function myFun(a, b, ...rest) {
+  console.log(&quot;a&quot;, a); 
+  console.log(&quot;b&quot;, b);
+  console.log(&quot;Other arguments&quot;, rest); 
+}
+
+myFun(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;, &quot;four&quot;, &quot;five&quot;, &quot;six&quot;);
+
+// Console Output:
+// a, one
+// b, two
+// Other arguments, [three, four, five, six] 
+</code></pre><p><strong>Spread Syntax</strong></p>
+<p>Spread syntax according to me was the coolest feature of ES6. It allows an iterable such as an array expression or string to be expanded in places where zero or more arguments (for function calls) or elements (for array literals) are expected, or an object expression to be expanded in places where zero or more key-value pairs (for object literals) are expected. Let’s take a look at examples to understand this better.</p>
+<pre><code>//using spread to pass arguments
+function myFunction(x, y, z) {  
+  console.log(x,y,z);
+}
+var args = [0, 1, 2];
+myFunction(...args); //logs 0 1 2
+
+//calling a constructor with new
+var dateFields = [1970, 0, 1];  // 1 Jan 1970
+var d = new Date(...dateFields); 
+
+//create new array from existing array
+var parts = ['shoulders', 'knees']; 
+var lyrics = ['head', ...parts, 'and', 'toes'];
+
+//copy and array
+var arr = [1, 2, 3];
+var arr2 = [...arr]; // like arr.slice()
+arr2.push(4); 
+// arr2 becomes [1, 2, 3, 4]
+// arr remains unaffected
+
+//concatenate arrays
+var arr1 = [0, 1, 2];
+var arr2 = [3, 4, 5];
+arr1 = [...arr1, ...arr2]; //[0, 1, 2, 3, 4, 5]
+
+//using spread in object literals
+var obj1 = { foo: 'bar', x: 42 };
+var obj2 = { foo: 'baz', y: 13 };
+
+var clonedObj = { ...obj1 };
+// Object { foo: &quot;bar&quot;, x: 42 }
+
+var mergedObj = { ...obj1, ...obj2 };
+// Object { foo: &quot;baz&quot;, x: 42, y: 13 }
+</code></pre><p><strong>Note</strong>: Rest syntax looks exactly like spread syntax, but is used for destructuring arrays and objects. In a way, rest syntax is the opposite of spread syntax: spread ‘expands’ an array into its elements, while rest collects multiple elements and ‘condenses’ them into a single element.</p>
+<p><strong>Classes and Inheritance</strong></p>
+<p>JavaScript classes, introduced in ECMAScript 2015, are primarily syntactical sugar over JavaScript’s existing prototype-based inheritance. Previously defining classes in JavaScript would be a mundane task due to the prototype-based model. ES6 JavaScript made it simpler to declare classes and subsequently simpler inheritance protocols. This <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">link</a> is a good source to get your concepts clear.</p>
+<p><strong>Generator Functions</strong></p>
+<p>Generators are functions which can be exited and later re-entered. Their context (variable bindings) will be saved across re-entrances.</p>
+<p>Generators in JavaScript — especially when combined with Promises — are a very powerful tool for asynchronous programming as they mitigate — if not entirely eliminate — the problems with callbacks, such as Callback Hell and Inversion of Control.
+This pattern is what <code>async</code> functions are built on top of.</p>
+<p>Calling a generator function does not execute its body immediately; an iterator object for the function is returned instead. When the iterator’s <code>next()</code> method is called, the generator function's body is executed until the first <code>yield</code> expression, which specifies the value to be returned from the iterator or, with <code>yield*</code>, delegates to another generator function. The <code>next()</code> method returns an object with a <code>value</code> property containing the yielded value and a <code>done</code> property which indicates whether the generator has yielded its last value as a boolean. Calling the <code>next()</code> method with an argument will resume the generator function execution, replacing the yield expression where execution was paused with the argument from <code>next()</code>.</p>
+<p>A <code>return</code> statement in a generator, when executed, will make the generator finished (i.e the <code>done</code> property of the object returned by it will be set to <code>true</code>). If a <code>value</code> is returned, it will be set as the value property of the object returned by the generator.
+Much like a <code>return</code> statement, an error thrown inside the generator will make the generator finished &ndash; unless caught within the generator's body.
+When a generator is finished, subsequent <code>next</code> calls will not execute any of that generator's code, they will just return an object of this form: <code>{value: undefined, done: true}</code>.</p>
+<pre><code>//simple example
+function* idMaker() {
+  var index = 0;
+  while (index &lt; index+1)
+    yield index++;
+}
+
+var gen = idMaker();
+
+console.log(gen.next().value); // 0
+console.log(gen.next().value); // 1
+console.log(gen.next().value); // 2
+console.log(gen.next().value); // 3
+// ...
+</code></pre><h3 id="other-small-features">Other small features</h3>
+<p><strong>Default parameter values</strong></p>
+<pre><code>f = (x, y = 7, z = 42) =&gt; {     
+     return x + y + z 
+} 
+f(1) === 50 //True
+</code></pre><p><strong>Array Matching ,Swapping, Object Matching</strong></p>
+<pre><code>var list = [ 1, 2, 3 ] 
+var [ a, , b ] = list //match a and b to 1 and 3
+
+[ b, a ] = [ a, b ] //swap without using another variable
+
+var { name, age, gender} = getDetails() //object matching
+//instead of
+var tmp = getDetails()
+var name = tmp.name
+var age = tmp.age
+var gender = tmp.gender
+</code></pre><p>These are the few features I thought are nice and will help you guys to write JavaScript better. Till the next one.</p>
+]]></content>
+        </item>
+        
+    </channel>
+</rss>

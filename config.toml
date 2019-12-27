@@ -112,7 +112,7 @@ disableHugoGeneratorInject = false
 
   [[params.social]]
     name = "stackoverflow"
-    url  = "https://www.stackoverflow.com/"
+    url  = "https://stackoverflow.com/users/10236583/ankitjena"
 
 [languages]
   [languages.en]

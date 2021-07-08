@@ -100,7 +100,7 @@ disableHugoGeneratorInject = false
 
   [[params.social]]
     name = "email"
-    url  = "mailto:ankitkjena@outlook.com"
+    url  = "mailto:ankitjena13@gmail.com"
 
   [[params.social]]
     name = "github"
@@ -111,7 +111,7 @@ disableHugoGeneratorInject = false
     url  = "https://www.linkedin.com/in/ankitjena"
 
   [[params.social]]
-    name = "dev.to"
+    name = "reddit"
     url  = "https://dev.to/ankitjey"
 
 [languages]

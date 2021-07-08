@@ -111,7 +111,7 @@ disableHugoGeneratorInject = false
     url  = "https://www.linkedin.com/in/ankitjena"
 
   [[params.social]]
-    name = "dev"
+    name = "dev.to"
     url  = "https://dev.to/ankitjey"
 
 [languages]

@@ -111,8 +111,8 @@ disableHugoGeneratorInject = false
     url  = "https://www.linkedin.com/in/ankitjena"
 
   [[params.social]]
-    name = "stackoverflow"
-    url  = "https://stackoverflow.com/users/10236583/ankitjena"
+    name = "dev"
+    url  = "https://dev.to/ankitjey"
 
 [languages]
   [languages.en]
